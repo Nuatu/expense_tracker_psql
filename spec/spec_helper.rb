@@ -15,3 +15,4 @@ RSpec.configure do |config|
     DB.exec("DELETE FROM categories *;")
   end
 end
+
