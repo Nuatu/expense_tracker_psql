@@ -59,7 +59,4 @@ describe "Expense" do
       expect(Expense.all).to eq []
     end
   end
-
-
-
 end

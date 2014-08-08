@@ -5,7 +5,7 @@ require 'company'
 require 'expense'
 
 DB = PG.connect({:dbname => 'expenses_test'})
-ATTRIBUTES = {'description' => "lunch", 'amount' => 7.43, 'date' => "2014-08-07"}
+ATTRIBUTES = {'description' => "lunch", 'amount' => 7.43, 'date' => "2014-08-07", 'name' => 'house', 'budget' => 300.00}
 
 RSpec.configure do |config|
   config.before(:each) do
