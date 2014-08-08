@@ -37,4 +37,8 @@ class Company
   def total
     DB.exec("SELECT SUM (amount) FROM companies JOIN expenses ON (companies.id = expenses.company_id) WHERE #{@id} = expenses.company_id;").first['sum'].to_f
   end
+
+  def percent_of_total
+    (self.total / Expense.total * 100).to_i
+  end
 end
