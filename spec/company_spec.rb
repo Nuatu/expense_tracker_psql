@@ -66,7 +66,7 @@ describe "Company" do
     end
   end
 
-   describe "percent_of_total" do
+  describe "percent_of_total" do
     it "returns the percentage spent at a company" do
       test_company = Company.new(ATTRIBUTES)
       test_company.save
@@ -79,6 +79,18 @@ describe "Company" do
       test_expense1 = Expense.new({'description' => 'lunch', 'amount' => 4.50, 'date' => '2014-07-27', 'company_id' => id1})
       test_expense1.save
       expect(test_company.percent_of_total).to eq 50
+    end
+  end
+
+  describe ".find" do
+    it "return a company for a specified id" do
+      test_company = Company.new(ATTRIBUTES)
+      test_company.save
+      id = test_company.id
+      test_company1 = Company.new({'name' => 'work'})
+      test_company1.save
+      id1 = test_company1.id
+      expect(Company.find(id)).to eq test_company
     end
   end
 end

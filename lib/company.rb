@@ -16,6 +16,11 @@ class Company
     output
   end
 
+  def self.find(id)
+    results = DB.exec("SELECT * FROM companies WHERE id = #{id};").first
+    Company.new(results)
+  end
+
   def save
     result = DB.exec("INSERT INTO companies (name) VALUES ('#{@name}') RETURNING id;")
     @id = result.first['id'].to_i
