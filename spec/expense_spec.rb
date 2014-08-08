@@ -87,4 +87,32 @@ describe "Expense" do
       expect(test_expense.categories).to eq [test_category, test_category1]
     end
   end
+
+  describe "company" do
+    it "returns the company associated with the expense" do
+      test_company = Company.new(ATTRIBUTES)
+      test_company.save
+      id = test_company.id
+      test_expense = Expense.new({'description' => 'markers', 'amount' => 4.50, 'date' => '2014-07-27', 'company_id' => id})
+      test_expense.save
+      expect(test_expense.company).to eq 'house'
+    end
+  end
+
+  describe ".total" do
+    it "adds up the grand total of all expenses" do
+      test_category = Category.new(ATTRIBUTES)
+      test_category.save
+      id = test_category.id
+      test_category1 = Category.new({'name' => 'work'})
+      test_category1.save
+      id1 = test_category1.id
+      test_expense = Expense.new(ATTRIBUTES)
+      test_expense.save
+      test_expense.add_category(id)
+      test_expense.add_category(id1)
+      expect(Expense.total).to eq 7.43
+      expect(Category.total).to eq 14.86
+    end
+  end
 end

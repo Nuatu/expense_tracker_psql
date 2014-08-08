@@ -17,6 +17,10 @@ class Category
     output
   end
 
+  def self.total
+    DB.exec("SELECT SUM (expenses.amount) FROM categories JOIN expenses_categories ON (categories.id = expenses_categories.category_id) JOIN expenses ON (expenses.id = expenses_categories.expense_id);").first['sum'].to_f
+  end
+
   def save
     result = DB.exec("INSERT INTO categories (name, budget) VALUES ('#{@name}', #{@budget}) RETURNING id;")
     @id = result.first['id'].to_i
@@ -40,8 +44,11 @@ class Category
     DB.exec("DELETE FROM categories WHERE id = #{@id};")
   end
 
-  def add_category(id)
-    DB.exec("INSERT INTO expenses_categories (expense_id, category_id) VALUES (#{@id}, #{id});")
+  def total
+    DB.exec("SELECT SUM (expenses.amount) FROM categories JOIN expenses_categories ON (categories.id = expenses_categories.category_id) JOIN expenses ON (expenses.id = expenses_categories.expense_id) WHERE #{@id} = expenses_categories.category_id;").first['sum'].to_f
   end
 
+  def percent_of_total
+    (self.total/Category.total * 100).to_i
+  end
 end

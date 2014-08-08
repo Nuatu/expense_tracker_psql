@@ -55,4 +55,56 @@ describe "Category" do
       expect(Category.all).to eq []
     end
   end
+
+  describe "total" do
+    it "adds the total expenses for that category" do
+      test_category = Category.new(ATTRIBUTES)
+      test_category.save
+      id = test_category.id
+      test_expense = Expense.new(ATTRIBUTES)
+      test_expense.save
+      test_expense.add_category(id)
+      test_expense1 = Expense.new({'description' => 'breakfast', 'amount' => 4.50, 'date' => '2014-07-27', 'company_id' => '3'})
+      test_expense1.save
+      test_expense1.add_category(id)
+      expect(test_category.total).to eq 11.93
+    end
+  end
+
+   describe ".total" do
+    it "adds the total across all categories" do
+      test_category = Category.new(ATTRIBUTES)
+      test_category.save
+      id = test_category.id
+      test_category1 = Category.new({'name' => 'work'})
+      test_category1.save
+      id1 = test_category1.id
+      test_expense = Expense.new(ATTRIBUTES)
+      test_expense.save
+      test_expense.add_category(id)
+      test_expense1 = Expense.new({'description' => 'breakfast', 'amount' => 4.50, 'date' => '2014-07-27', 'company_id' => '3'})
+      test_expense1.save
+      test_expense1.add_category(id1)
+      expect(Category.total).to eq 11.93
+    end
+  end
+
+   describe "percent_of_total" do
+    it "returns the percentage spent on a category" do
+      test_category = Category.new(ATTRIBUTES)
+      test_category.save
+      id = test_category.id
+      test_category1 = Category.new({'name' => 'work'})
+      test_category1.save
+      id1 = test_category1.id
+      test_expense = Expense.new(ATTRIBUTES)
+      test_expense.save
+      test_expense.add_category(id)
+      test_expense1 = Expense.new({'description' => 'breakfast', 'amount' => 4.50, 'date' => '2014-07-27', 'company_id' => '3'})
+      test_expense1.save
+      test_expense1.add_category(id1)
+      expect(test_category.percent_of_total).to eq 62
+    end
+  end
+
 end

@@ -19,8 +19,12 @@ class Expense
     output
   end
 
+  def self.total
+    DB.exec("SELECT SUM (amount) FROM expenses;").first['sum'].to_f
+  end
+
   def save
-    result = DB.exec("INSERT INTO expenses (description, amount, date) VALUES ('#{@description}', #{@amount}, '#{@date}') RETURNING id;")
+    result = DB.exec("INSERT INTO expenses (description, amount, date, company_id) VALUES ('#{@description}', #{@amount}, '#{@date}', #{@company_id}) RETURNING id;")
     @id = result.first['id'].to_i
   end
 
@@ -63,5 +67,9 @@ class Expense
       output << Category.new(result)
     end
     output
+  end
+
+  def company
+    DB.exec("SELECT companies.* FROM expenses JOIN companies ON (expenses.company_id = companies.id) WHERE expenses.id = #{@id};").first['name']
   end
 end
