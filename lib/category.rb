@@ -45,7 +45,15 @@ class Category
   end
 
   def total
-    DB.exec("SELECT SUM (expenses.amount) FROM categories JOIN expenses_categories ON (categories.id = expenses_categories.category_id) JOIN expenses ON (expenses.id = expenses_categories.expense_id) WHERE #{@id} = expenses_categories.category_id;").first['sum'].to_f
+    DB.exec("SELECT SUM (amount) FROM categories JOIN expenses_categories ON (categories.id = category_id) JOIN expenses ON (expenses_categories.expense_id = expenses.id) WHERE #{@id} = expenses_categories.category_id;").first['sum'].to_f
+  end
+
+  def total_month(month,year)
+    DB.exec("SELECT SUM (amount) FROM categories JOIN expenses_categories ON (categories.id = category_id) JOIN expenses ON (expenses.id = expense_id) WHERE #{@id} = expenses_categories.category_id AND date_part('month', expenses.date) = #{month} AND date_part('year', expenses.date) = #{year};").first['sum'].to_f
+  end
+
+  def amount_to_spend(month,year)
+    self.budget - (DB.exec("SELECT SUM (amount) FROM categories JOIN expenses_categories ON (categories.id = category_id) JOIN expenses ON (expenses.id = expense_id) WHERE #{@id} = expenses_categories.category_id AND date_part('month', expenses.date) = #{month} AND date_part('year', expenses.date) = #{year};").first['sum'].to_f)
   end
 
   def percent_of_total

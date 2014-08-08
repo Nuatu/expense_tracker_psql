@@ -52,4 +52,17 @@ describe "Company" do
       expect(Company.all).to eq []
     end
   end
+
+  describe "total" do
+    it "sums the expenses associated with a company" do
+      test_company = Company.new(ATTRIBUTES)
+      test_company.save
+      id = test_company.id
+      test_expense = Expense.new({'description' => "lunch", 'amount' => 7.43, 'date' => "2014-08-07", 'company_id' => id})
+      test_expense.save
+      test_expense1 = Expense.new({'description' => "dinner", 'amount' => 10.00, 'date' => "2014-08-08", 'company_id' => id})
+      test_expense1.save
+      expect(test_company.total).to eq 17.43
+    end
+  end
 end

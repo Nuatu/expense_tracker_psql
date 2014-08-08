@@ -34,4 +34,7 @@ class Company
     DB.exec("DELETE FROM companies WHERE id = #{@id};")
   end
 
+  def total
+    DB.exec("SELECT SUM (amount) FROM companies JOIN expenses ON (companies.id = expenses.company_id) WHERE #{@id} = expenses.company_id;").first['sum'].to_f
+  end
 end
