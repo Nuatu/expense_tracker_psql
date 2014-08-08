@@ -59,4 +59,32 @@ describe "Expense" do
       expect(Expense.all).to eq []
     end
   end
+
+  describe "add_category" do
+    it "adds a category to an expense" do
+      test_expense = Expense.new(ATTRIBUTES)
+      test_expense.save
+      test_category = Category.new(ATTRIBUTES)
+      test_category.save
+      id = test_category.id
+      test_expense.add_category(id)
+      expect(test_expense.categories).to eq [test_category]
+    end
+  end
+
+  describe "categories" do
+    it "displays all the categories associated with an expense" do
+      test_expense = Expense.new(ATTRIBUTES)
+      test_expense.save
+      test_category = Category.new(ATTRIBUTES)
+      test_category.save
+      id = test_category.id
+      test_category1 = Category.new({'name' => 'school', 'budget' => 100.00})
+      test_category1.save
+      id1 = test_category1.id
+      test_expense.add_category(id)
+      test_expense.add_category(id1)
+      expect(test_expense.categories).to eq [test_category, test_category1]
+    end
+  end
 end

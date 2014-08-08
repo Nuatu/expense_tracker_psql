@@ -40,4 +40,8 @@ class Category
     DB.exec("DELETE FROM categories WHERE id = #{@id};")
   end
 
+  def add_category(id)
+    DB.exec("INSERT INTO expenses_categories (expense_id, category_id) VALUES (#{@id}, #{id});")
+  end
+
 end

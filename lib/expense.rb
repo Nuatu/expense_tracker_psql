@@ -52,4 +52,16 @@ class Expense
     DB.exec("DELETE FROM expenses WHERE id = #{@id};")
   end
 
+  def add_category(id)
+    DB.exec("INSERT INTO expenses_categories (expense_id, category_id) VALUES (#{@id}, #{id});")
+  end
+
+  def categories
+    output = []
+    results = DB.exec("SELECT categories.* FROM expenses JOIN expenses_categories ON (expenses.id = expenses_categories.expense_id) JOIN categories ON (expenses_categories.category_id = categories.id) WHERE expenses.id = #{@id};")
+    results.each do |result|
+      output << Category.new(result)
+    end
+    output
+  end
 end
